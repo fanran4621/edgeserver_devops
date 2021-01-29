@@ -1,0 +1,57 @@
+version: "3.0"
+
+services: 
+  dbmysql:
+        image: ${REGISTRY_URL}dbmysql:latest
+        environment:
+            TZ: Asia/Shanghai
+            MYSQL_ROOT_HOST: '%'
+        ports:
+            - "32306:3306"
+        volumes:
+            - eg-db-data:/var/lib/edgeserver/mysql/
+        command: [
+            '--character-set-server=utf8mb4',
+            '--collation-server=utf8mb4_unicode_ci'
+        ]
+        restart: always
+  
+  
+  
+  edgeserver:
+        image: ${REGISTRY_URL}edgeserver:latest
+        environment:
+          TZ: Asia/Shanghai
+          OPCClient:BaseUrl: http://opcclient:80/api/services/OPCClient/
+        ports: 
+          - "7082:80"
+        depends_on: 
+          - dbmysql 
+          - opcclient
+        restart: always
+
+  backgroundjob:
+        image: ${REGISTRY_URL}backgroundjob:latest
+        environment:
+          TZ: Asia/Shanghai
+          OPCClient:BaseUrl: http://opcclient:80/api/services/OPCClient/
+        ports: 
+          - "7081:80"
+        depends_on: 
+          - edgeserver
+          - dbmysql
+          - opcclient
+        restart: always
+
+  opcclient:
+        image: ${REGISTRY_URL}opcclient:latest
+        environment:
+          TZ: Asia/Shanghai
+        ports: 
+          - "7083:80"
+        depends_on: 
+          - dbmysql
+        restart: always
+
+volumes:
+  eg-db-data:
