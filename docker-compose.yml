@@ -1,4 +1,4 @@
-version: "3.0"
+version: "3.7"
 
 services: 
   dbmysql:
@@ -9,7 +9,7 @@ services:
         ports:
             - "32306:3306"
         volumes:
-            - eg-db-data:/var/lib/edgeserver/mysql/
+            - db-data:/var/lib/mysql/
         command: [
             '--character-set-server=utf8mb4',
             '--collation-server=utf8mb4_unicode_ci'
@@ -54,4 +54,5 @@ services:
         restart: always
 
 volumes:
-  eg-db-data:
+  db-data:
+    name: "edgeserver-db-data"
