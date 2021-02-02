@@ -53,6 +53,16 @@ services:
           - dbmysql
         restart: always
 
+  reactapp:
+        image: ${REGISTRY_URL}edgeserver_react_frontend:latest
+        environment:
+          TZ: Asia/Shanghai
+        ports: 
+          - "30180:80"
+        depends_on: 
+          - edgeserver
+        restart: always
+
 volumes:
   db-data:
     name: "edgeserver-db-data"

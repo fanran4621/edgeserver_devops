@@ -3,23 +3,26 @@ DOCKER_REGISTRY_URL=swr.cn-north-4.myhuaweicloud.com/quest
 
 # docker login first
 
+
+push_image()
+{
+  IMAGE_NAME=$1
+  docker tag $IMAGE_NAME ${DOCKER_REGISTRY_URL}/$IMAGE_NAME
+  docker push ${DOCKER_REGISTRY_URL}/$IMAGE_NAME
+}
+
+
 # edgeserver
-IMAGE=edgeserver
-docker tag $IMAGE:latest ${DOCKER_REGISTRY_URL}/$IMAGE:latest
-docker push ${DOCKER_REGISTRY_URL}/$IMAGE:latest
+push_image edgeserver
 
 # background job 
-IMAGE=backgroundjob
-docker tag $IMAGE:latest ${DOCKER_REGISTRY_URL}/$IMAGE:latest
-docker push ${DOCKER_REGISTRY_URL}/$IMAGE:latest
+push_image backgroundjob
 
 # opc client 
-IMAGE=opcclient
-docker tag $IMAGE:latest ${DOCKER_REGISTRY_URL}/$IMAGE:latest
-docker push ${DOCKER_REGISTRY_URL}/$IMAGE:latest
+push_image opcclient
 
 # dbmysql 
-IMAGE=dbmysql
-docker tag $IMAGE:latest ${DOCKER_REGISTRY_URL}/$IMAGE:latest
-docker push ${DOCKER_REGISTRY_URL}/$IMAGE:latest
+push_image dbmysql
 
+# react app 
+push_image edgeserver_react_frontend:latest
